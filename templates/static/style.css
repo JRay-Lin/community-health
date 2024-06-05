@@ -6,6 +6,7 @@ body {
 
 h1 {
     text-align: center;
+    margin-top: 0;
 }
 
 form {
@@ -15,6 +16,27 @@ form {
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
+}
+/* divs */
+#newUser {
+    position: relative;
+}
+
+/* newUser div*/
+.back-button,
+.tab-button {
+    text-decoration: none;
+    color: black;
+    background-color: #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: xx-large;
+    margin-right: 10px;
+}
+
+.back-button:hover,
+.tab-button:hover {
+    background-color: #9c9c9c;
 }
 
 .userform {
@@ -33,9 +55,9 @@ form {
 .userform input,
 .userform select {
     flex: 1;
-    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    height: 30px;
 }
 
 input[type="submit"] {

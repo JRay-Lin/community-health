@@ -10,12 +10,104 @@
         <title>主頁</title>
     </head>
     <body>
-        <h1>Hello world</h1>
-        <button id="newUserButton">Go to New User Page</button>
-        <script>
-            document.getElementById("newUserButton").onclick = function () {
-                window.location.href = "newUser.html";
-            };
-        </script>
+      <div>
+        {% with messages = get_flashed_messages(with_categories=false) %}
+          {% if messages %}
+            <script>
+              // 將後端的消息轉為 JSON 字符串，並在客戶端將其解析為 JavaScript 數組
+              var messages = JSON.parse('{{ messages | tojson | safe }}');
+              for (var i = 0; i < messages.length; i++) {
+                alert(messages[i]);
+              }
+            </script>
+          {% endif %}
+        {% endwith %}
+    </div>
+        <div id="newUser">
+            <form action="/newuser" method="post" id="newUser-form">
+                <h1>新增使用者</h1>
+                <div class="userform">
+                    <label for="name">名字:</label>
+                    <input type="text" id="name" name="name" required />
+                </div>
+                <div class="userform">
+                    <label for="birthday">生日:</label>
+                    <input
+                        type="text"
+                        id="birthday"
+                        name="birthday"
+                        required
+                        placeholder="yyyy-mm-dd"
+                        pattern="\d{4}-\d{2}-\d{2}"
+                    />
+                </div>
+                <div class="userform">
+                    <label for="gender">性別:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="userform">
+                    <label for="height">身高（公分）:</label>
+                    <input
+                        type="text"
+                        id="height"
+                        name="height"
+                        placeholder="example: 180.1"
+                        required
+                    />
+                </div>
+                <input type="submit" value="上傳" />
+            </form>
+        </div>
+        <div id="userData">
+        </div>
+        <div id="newHealth">
+            <div id="newHealth">
+                <form action="/newhealth" method="post" id="newHealth-form">
+                    <h1>新增健康數據</h1>
+                    <div class="userform">
+                        <label for="user_id">使用者:</label>
+                        <select id="user_id" name="user_id" required>
+                          {% for user in users %}
+                          <option value="{{ user[0] }}">
+                              {{ user[1] }}
+                          </option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                    <div class="userform">
+                        <label for="weight">體重（公斤）:</label>
+                        <input
+                            type="number"
+                            id="weight"
+                            name="weight"
+                            required
+                        />
+                    </div>
+                    <div class="userform">
+                        <label for="blood_pressure">血壓（mmHg）:</label>
+                        <input
+                            type="text"
+                            id="blood_pressure"
+                            name="blood_pressure"
+                            required
+                        />
+                    </div>
+                    <div class="userform">
+                        <label for="blood_sugar">血糖（mg/dL）:</label>
+                        <input
+                            type="number"
+                            id="blood_sugar"
+                            name="blood_sugar"
+                            required
+                        />
+                    </div>
+                    <input type="submit" value="上傳" />
+                </form>
+        <div id="healthHistory">
+        </div>
     </body>
 </html>
