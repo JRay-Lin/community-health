@@ -43,6 +43,7 @@ form {
 }
 
 #bottom-frame {
+    display: block;
 }
 
 /* content-divs */

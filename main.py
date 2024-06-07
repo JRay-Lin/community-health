@@ -15,7 +15,8 @@ app.secret_key = "your_secret_key"
 # main page
 @app.route("/")
 def index():
-    return render_template("index.html")
+    report_content = request.args.get("report_content", "")
+    return render_template("index.html", report_content=report_content)
 
 
 # routing "addUser" function
@@ -113,8 +114,8 @@ def delete_user(user_id):
 def health_history():
     user_id = request.form.get("user_id")
 
-    healthHistory(user_id)
-    return redirect(url_for("index"))
+    report_content = healthHistory(user_id)
+    return redirect(url_for("index", report_content=report_content))
 
 
 # routing "userList" function
