@@ -7,107 +7,224 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='style.css') }}"
         />
-        <title>主頁</title>
+        <title>健康管理</title>
     </head>
     <body>
-      <div>
-        {% with messages = get_flashed_messages(with_categories=false) %}
-          {% if messages %}
+        <div>
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %}
             <script>
-              // 將後端的消息轉為 JSON 字符串，並在客戶端將其解析為 JavaScript 數組
-              var messages = JSON.parse('{{ messages | tojson | safe }}');
-              for (var i = 0; i < messages.length; i++) {
-                alert(messages[i]);
-              }
+                // 將後端的消息轉為 JSON 字符串，並在客戶端將其解析為 JavaScript 數組
+                var messages = {{ messages | tojson | safe }};
+                messages.forEach(function(message) {
+                    var category = message[0];
+                    var text = message[1];
+                    alert(category + ": " + text);
+                });
             </script>
-          {% endif %}
-        {% endwith %}
-    </div>
-        <div id="newUser">
-            <form action="/newuser" method="post" id="newUser-form">
-                <h1>新增使用者</h1>
-                <div class="userform">
-                    <label for="name">名字:</label>
-                    <input type="text" id="name" name="name" required />
+            {% endif %} {% endwith %}
+        </div>
+        <div id="top-frame">
+            <div id="left-frame">
+                <div id="newUser">
+                    <form action="/newuser" method="post" id="newUser-form">
+                        <h1>新增使用者</h1>
+                        <div class="form-content">
+                            <label for="name">名字:</label>
+                            <input type="text" id="name" name="name" required />
+                        </div>
+                        <div class="form-content">
+                            <label for="birthday">生日:</label>
+                            <input
+                                type="text"
+                                id="birthday"
+                                name="birthday"
+                                required
+                                placeholder="  yyyy-mm-dd"
+                                pattern="\d{4}-\d{2}-\d{2}"
+                            />
+                        </div>
+                        <div class="form-content">
+                            <label for="gender">性別:</label>
+                            <select id="gender" name="gender" required>
+                                <option value="" disabled selected>
+                                    選擇性別
+                                </option>
+                                <option value="male">男</option>
+                                <option value="female">女</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-content">
+                            <label for="height">身高 (公分):</label>
+                            <input
+                                type="text"
+                                id="height"
+                                name="height"
+                                placeholder="  example: 180.1"
+                                required
+                            />
+                        </div>
+                        <input type="submit" value="新增" />
+                    </form>
                 </div>
-                <div class="userform">
-                    <label for="birthday">生日:</label>
-                    <input
-                        type="text"
-                        id="birthday"
-                        name="birthday"
-                        required
-                        placeholder="yyyy-mm-dd"
-                        pattern="\d{4}-\d{2}-\d{2}"
+
+                <div id="userData">
+                    <form action="/modifyuser" method="post" id="userData-form">
+                        <h1>使用者資料</h1>
+                        <div class="form-content">
+                            <label for="modify-user_id">名字:</label>
+                            <select id="modify-user_id" name="user_id" required>
+                                <option value="" disabled selected>
+                                    選擇用戶
+                                </option>
+                            </select>
+                            <button id="userDel-button" type="button">
+                                刪除
+                            </button>
+                        </div>
+                        <div class="form-content">
+                            <label for="modify-birthday">生日:</label>
+                            <input
+                                type="text"
+                                id="modify-birthday"
+                                name="birthday"
+                                disabled
+                            />
+                        </div>
+                        <div class="form-content">
+                            <label for="modify-gender">性別:</label>
+                            <input
+                                type="text"
+                                id="modify-gender"
+                                name="gender"
+                                disabled
+                            />
+                        </div>
+                        <div class="form-content">
+                            <label for="modify-height">身高 (公分):</label>
+                            <input
+                                type="text"
+                                id="modify-height"
+                                name="height"
+                                disabled
+                            />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="right-frame">
+                <div id="newHealth">
+                    <form
+                        action="/newhealthdata"
+                        method="post"
+                        id="newHealth-form"
+                    >
+                        <h1>新增健康數據</h1>
+                        <div class="form-content">
+                            <label for="newHealth-user_id">名字:</label>
+                            <select
+                                id="newHealth-user_id"
+                                name="user_id"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    選擇用戶
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-content">
+                            <label for="newHealth-weight">體重(公斤):</label>
+                            <input
+                                type="text"
+                                id="newHealth-weight"
+                                name="weight"
+                                placeholder="  example: 80.2"
+                                required
+                            />
+                        </div>
+                        <div class="form-content">
+                            <label for="newHealth-blood_pressure"
+                                >血壓(mmHg):</label
+                            >
+                            <input
+                                type="text"
+                                id="newHealth-blood_pressure"
+                                name="blood_pressure_c"
+                                placeholder="  收縮壓"
+                                required
+                            />
+                            <input
+                                type="text"
+                                id="newHealth-blood_pressure"
+                                name="blood_pressure_r"
+                                placeholder="  舒張壓"
+                                required
+                                style="margin-left: 5px"
+                            />
+                        </div>
+                        <div class="form-content">
+                            <label for="newHealth-blood_sugar"
+                                >空腹血糖(mg/dL):</label
+                            >
+                            <input
+                                type="text"
+                                id="newHealth-blood_sugar"
+                                name="blood_sugar"
+                                placeholder="  example: 90"
+                                required
+                            />
+                        </div>
+                        <input type="submit" value="新增" />
+                    </form>
+                </div>
+
+                <div id="healthHistory">
+                    <form
+                        action="/healthhistory"
+                        method="post"
+                        id="healthHistory-form"
+                    >
+                        <h1>歷史健康資料</h1>
+                        <div class="form-content">
+                            <label for="historyHealth-user_id">名字:</label>
+                            <select
+                                id="historyHealth-user_id"
+                                name="user_id"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    選擇用戶
+                                </option>
+                            </select>
+                        </div>
+                        <input type="submit" value="查詢" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="bottom-frame">
+            <form>
+                <div class="form-cotent">
+                    <h1>資料檢視</h1>
+                    <img
+                        src="{{ url_for('static', filename='picture/weight.png') }}"
+                        alt=""
+                    />
+                    <img
+                        src="{{ url_for('static', filename='picture/bp.png') }}"
+                        alt=""
+                    />
+                    <img
+                        src="{{ url_for('static', filename='picture/bs.png') }}"
+                        alt=""
                     />
                 </div>
-                <div class="userform">
-                    <label for="gender">性別:</label>
-                    <select id="gender" name="gender" required>
-                        <option value="male">男</option>
-                        <option value="female">女</option>
-                        <option value="other">其他</option>
-                    </select>
-                </div>
-                <div class="userform">
-                    <label for="height">身高（公分）:</label>
-                    <input
-                        type="text"
-                        id="height"
-                        name="height"
-                        placeholder="example: 180.1"
-                        required
-                    />
-                </div>
-                <input type="submit" value="上傳" />
             </form>
         </div>
-        <div id="userData">
-        </div>
-        <div id="newHealth">
-            <div id="newHealth">
-                <form action="/newhealth" method="post" id="newHealth-form">
-                    <h1>新增健康數據</h1>
-                    <div class="userform">
-                        <label for="user_id">使用者:</label>
-                        <select id="user_id" name="user_id" required>
-                          {% for user in users %}
-                          <option value="{{ user[0] }}">
-                              {{ user[1] }}
-                          </option>
-                          {% endfor %}
-                        </select>
-                    </div>
-                    <div class="userform">
-                        <label for="weight">體重（公斤）:</label>
-                        <input
-                            type="number"
-                            id="weight"
-                            name="weight"
-                            required
-                        />
-                    </div>
-                    <div class="userform">
-                        <label for="blood_pressure">血壓（mmHg）:</label>
-                        <input
-                            type="text"
-                            id="blood_pressure"
-                            name="blood_pressure"
-                            required
-                        />
-                    </div>
-                    <div class="userform">
-                        <label for="blood_sugar">血糖（mg/dL）:</label>
-                        <input
-                            type="number"
-                            id="blood_sugar"
-                            name="blood_sugar"
-                            required
-                        />
-                    </div>
-                    <input type="submit" value="上傳" />
-                </form>
-        <div id="healthHistory">
-        </div>
+
+        <script src="{{ url_for('static', filename='scripts/user.js') }}"></script>
     </body>
 </html>

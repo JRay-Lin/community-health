@@ -7,19 +7,60 @@ body {
 h1 {
     text-align: center;
     margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
 }
 
 form {
-    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
 }
-/* divs */
+
+/* frame-divs */
+#top-frame {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#left-frame {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+    width: 30vw;
+}
+
+#right-frame {
+    display: flex;
+    flex-direction: column;
+    min-width: 650px;
+    width: 70vw;
+    margin-left: 10px;
+}
+
+#bottom-frame {
+}
+
+/* content-divs */
 #newUser {
-    position: relative;
+    min-width: 350px;
+}
+
+#userData {
+    min-width: 350px;
+    margin-top: 10px;
+}
+
+#newHealth {
+    margin-bottom: 10px;
+}
+
+#healthHistory {
+    min-width: 650px;
 }
 
 /* newUser div*/
@@ -39,21 +80,21 @@ form {
     background-color: #9c9c9c;
 }
 
-.userform {
+.form-content {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.userform label {
-    flex: 0 0 120px;
-    margin-right: 10px;
+.form-content label {
+    flex: 0 0 100px;
+    margin-right: 5px;
     text-align: left;
 }
 
-.userform input,
-.userform select {
+.form-content input,
+.form-content select {
     flex: 1;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -75,4 +116,14 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #45a049;
+}
+
+/* modify user div*/
+#userDel-button {
+    background-color: rgb(255, 96, 96);
+    border: 0;
+    border-radius: 5px;
+    margin-left: 10px;
+    padding: 8px;
+    color: white;
 }
