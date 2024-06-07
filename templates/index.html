@@ -209,18 +209,20 @@
             <form>
                 <div class="form-cotent">
                     <h1>資料檢視</h1>
-                    <img
-                        src="{{ url_for('static', filename='picture/weight.png') }}"
-                        alt=""
-                    />
-                    <img
-                        src="{{ url_for('static', filename='picture/bp.png') }}"
-                        alt=""
-                    />
-                    <img
-                        src="{{ url_for('static', filename='picture/bs.png') }}"
-                        alt=""
-                    />
+                    <div id="img-container">
+                        <img
+                            src="{{ url_for('static', filename='picture/weight.png') }}"
+                            alt=""
+                        />
+                        <img
+                            src="{{ url_for('static', filename='picture/bp.png') }}"
+                            alt=""
+                        />
+                        <img
+                            src="{{ url_for('static', filename='picture/bs.png') }}"
+                            alt=""
+                        />
+                    </div>
                 </div>
             </form>
         </div>
