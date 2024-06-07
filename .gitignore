@@ -1,3 +1,4 @@
 /.conda
 /__pycache__
+/templates/static/pictures
 .DS_Store
