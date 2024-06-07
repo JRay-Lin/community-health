@@ -1,7 +1,5 @@
-from audioop import avg
 import os
 import sqlite3
-from numpy import around
 import pandas as pd
 from flask import flash
 import matplotlib
@@ -155,27 +153,14 @@ def healthChecker(user_id, df):
     if avgbpc - avgbpr >= 60:
         bpg_status = "血壓差過高"
 
-    bodyText = (
-        "平均體重"
-        + str(round(avgweight, 2))
-        + "kg,"
-        + bmi_status
-        + "\n平均血糖"
-        + str(round(avgbs, 2))
-        + "mg/dL,"
-        + bs_status
-        + "\n平均血壓"
-        + str(around(avgbpc, 2))
-        + "/"
-        + str(round(avgbpr, 2))
-        + "mmHg,"
-        + hbp_status
-        + ","
-        + lbp_status
-        + ","
-        + bpg_status
+    report_content = (
+        f"<ul>"
+        f"<li>平均體重: {round(avgweight, 2)}kg, {bmi_status}</li>"
+        f"<li>平均血糖: {round(avgbs, 2)}mg/dL, {bs_status}</li>"
+        f"<li>平均血壓: {round(avgbpc, 2)}/{round(avgbpr, 2)}mmHg, {hbp_status}, {lbp_status}, {bpg_status}</li>"
+        f"</ul>"
     )
-    return bodyText
+    return report_content
 
 
 # search health history and plot

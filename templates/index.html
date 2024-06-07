@@ -209,7 +209,7 @@
             <form>
                 <div class="form-cotent">
                     <h1>資料檢視</h1>
-                    <p>{{ report_content }}</p>
+                    <div>{{ report_content|safe }}</div>
                     <div id="img-container">
                         <img
                             src="{{ url_for('static', filename='pictures/weight.png') }}"
