@@ -19,9 +19,6 @@ def removeOldPicture():
     if os.path.exists("templates/static/pictures/weight.png"):
         os.remove("templates/static/pictures/weight.png")
 
-    if os.path.exists("templates/static/pictures/report.txt"):
-        os.remove("templates/static/pictures/report.txt")
-
 
 # check if table needed is not exist
 def tableChecker():
