@@ -3,10 +3,11 @@
 from flask import Flask, request, flash, redirect, url_for, render_template, jsonify
 from datetime import datetime
 import webbrowser
+
 from modules import *
 
 
-# create Flask app
+# Create Flask app
 app = Flask(__name__)
 app._static_folder = "./templates/static"
 app.secret_key = "your_secret_key"
@@ -15,6 +16,7 @@ app.secret_key = "your_secret_key"
 # main page
 @app.route("/")
 def index():
+    # send report content to index.html
     report_content = request.args.get("report_content", "")
     return render_template("index.html", report_content=report_content)
 
@@ -22,17 +24,19 @@ def index():
 # routing "addUser" function
 @app.route("/newuser", methods=["POST"])
 def new_user():
+    # claim data from request
     name = request.form.get("name")
     birthday = request.form.get("birthday")
     gender = request.form.get("gender")
     height = request.form.get("height")
 
-    # 檢查日期格式
+    # check birthday format
     if not birthday:
         flash("請輸入有效的日期格式 (yyyy-mm-dd)", "error")
         return redirect(url_for("index"))
 
     try:
+        # turn birthday into datetime format
         birthday_date = datetime.strptime(birthday, "%Y-%m-%d").date()
         if birthday_date > datetime.today().date():
             flash("日期不能超過今天", "error")
@@ -43,6 +47,7 @@ def new_user():
         return redirect(url_for("index"))
 
     try:
+        # check height value
         height = float(height)  # type: ignore
         if height < 0 or height > 300:  # 金氏世界紀錄最高身高的紀錄272cm
             flash("請輸入有效的身高", "error")
@@ -51,13 +56,14 @@ def new_user():
         flash("身高僅能輸入數字", "error")
         return redirect(url_for("index"))
 
-    addUser(name, birthday_date, gender, height)  # 確保存儲浮點數
+    addUser(name, birthday_date, gender, height)
     return redirect(url_for("index"))
 
 
 # routing "addHealthData" function
 @app.route("/newhealthdata", methods=["POST"])
 def new_health_data():
+    # claim data from request
     user_id = request.form.get("user_id")
     weight = request.form.get("weight")
     bpc = request.form.get("blood_pressure_c")
@@ -112,6 +118,7 @@ def delete_user(user_id):
 # routing "healthHistory" function
 @app.route("/healthhistory", methods=["POST"])
 def health_history():
+    # claim data from request
     user_id = request.form.get("user_id")
 
     report_content = healthHistory(user_id)
@@ -121,7 +128,8 @@ def health_history():
 # routing "userList" function
 @app.route("/userlist", methods=["GET"])
 def get_user_list():
-    users = userList()
+    users = userList()  # get userlist from database
+    # turn user list to json format
     user_list = [
         {
             "id": user[0],
@@ -136,7 +144,7 @@ def get_user_list():
 
 
 if __name__ == "__main__":
-    webbrowser.open("http://127.0.0.1:5000")
+    webbrowser.open("http://127.0.0.1:5000")  # open browser
     tableChecker()
     removeOldPicture()
-    app.run(debug=True)
+    app.run(debug=False)

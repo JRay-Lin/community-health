@@ -1,3 +1,5 @@
+# -*- coding: UTF-8-*-
+
 import os
 import sqlite3
 import pandas as pd
@@ -67,6 +69,7 @@ def userList():
     database = sqlite3.connect("database.db")
     cursor = database.cursor()
 
+    # get user list from database
     cursor.execute("SELECT * FROM user")
     users = cursor.fetchall()
     database.close()
@@ -79,10 +82,14 @@ def delUser(name_id):
     database = sqlite3.connect("database.db")
     cursor = database.cursor()
 
-    cursor.execute("DELETE FROM user WHERE id=?", (name_id,))
-    database.commit()
-    database.close()
-    flash("使用者資料已刪除", "success")
+    try:
+        cursor.execute("DELETE FROM user WHERE id=?", (name_id,))
+        database.commit()
+        flash("使用者資料已刪除", "success")
+    except Exception as e:
+        flash("Error: delete user failed", "error")
+    finally:
+        database.close()
 
 
 # add new health data to database
@@ -140,6 +147,8 @@ def healthChecker(user_id, df):
     # blood sugar
     if avgbs > 100:
         bs_status = "血糖過高"
+    elif avgbs < 70:
+        bs_status = "血糖過低"
 
     # blood pressure
     if avgbpc >= 130 or avgbpr >= 90:
@@ -150,6 +159,7 @@ def healthChecker(user_id, df):
     if avgbpc - avgbpr >= 60:
         bpg_status = "血壓差過高"
 
+    # create report content in HTML format
     report_content = (
         f"<ul>"
         f"<li>平均體重: {round(avgweight, 2)}kg, {bmi_status}</li>"
