@@ -1,4 +1,6 @@
 /.conda
 /__pycache__
-/templates/static/pictures
+/templates/static/pictures/bp.png
+/templates/static/pictures/bs.png
+/templates/static/pictures/weight.png
 .DS_Store
