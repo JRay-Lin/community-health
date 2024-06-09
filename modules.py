@@ -4,8 +4,10 @@ import os
 import sqlite3
 import pandas as pd
 from flask import flash
+
 import matplotlib
 from matplotlib import pyplot as plt
+
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from datetime import datetime
 
@@ -68,12 +70,15 @@ def userList():
     # connect to database
     database = sqlite3.connect("database.db")
     cursor = database.cursor()
-
-    # get user list from database
-    cursor.execute("SELECT * FROM user")
-    users = cursor.fetchall()
-    database.close()
-    return users
+    try:
+        # get user list from database
+        cursor.execute("SELECT * FROM user")
+        users = cursor.fetchall()
+        return users
+    except Exception as e:
+        flash("Error: get user list failed", "error")
+    finally:
+        database.close()
 
 
 # delete user from database
@@ -108,20 +113,31 @@ def addHealthData(user_id, date, weight, bpc, bpr, bs):
         database.commit()
         flash("健康資料已上傳", "success")
     except Exception as e:
-        flash("Error: add data failed", "error")
+        flash("Error: add health data failed", "error")
     finally:
         database.close()
 
 
 def healthChecker(user_id, df):
+    name = ""
+    height = 0
+
     # connect to database
     database = sqlite3.connect("database.db")
     cursor = database.cursor()
 
-    # get height from database
-    cursor.execute("SELECT height from user WHERE id=?", (user_id,))
-    height = cursor.fetchone()[0]
-    database.close()
+    try:
+        # get height from database
+        cursor.execute("SELECT height from user WHERE id=?", (user_id,))
+        height = cursor.fetchone()[0]
+
+        # get user name
+        cursor.execute("SELECT name from user WHERE id=?", (user_id,))
+        name = cursor.fetchone()[0]
+    except Exception as e:
+        flash("Error: get user info failed", "error")
+    finally:
+        database.close()
 
     # get latest 30 data
     df30 = df.head(30)
@@ -162,6 +178,7 @@ def healthChecker(user_id, df):
     # create report content in HTML format
     report_content = (
         f"<ul>"
+        f"<li>姓名: {name}</li>"
         f"<li>平均體重: {round(avgweight, 2)}kg, {bmi_status}</li>"
         f"<li>平均血糖: {round(avgbs, 2)}mg/dL, {bs_status}</li>"
         f"<li>平均血壓: {round(avgbpc, 2)}/{round(avgbpr, 2)}mmHg, {hbp_status}, {lbp_status}, {bpg_status}</li>"
@@ -176,12 +193,17 @@ def healthHistory(user_id):
     database = sqlite3.connect("database.db")
     cursor = database.cursor()
 
-    # get data from database
-    cursor.execute(
-        "SELECT date, weight, bpc, bpr, bs FROM data WHERE user_id=?", (user_id,)
-    )
-    datas = cursor.fetchall()
-    database.close()
+    try:
+        # get data from database
+        cursor.execute(
+            "SELECT date, weight, bpc, bpr, bs FROM data WHERE user_id=?", (user_id,)
+        )
+        datas = cursor.fetchall()
+    except Exception as e:
+        flash("Error: get data failed", "error")
+        return
+    finally:
+        database.close()
 
     # turn datas to pandas dataframe
     df = pd.DataFrame(datas, columns=["date", "weight", "bpc", "bpr", "bs"])
@@ -190,9 +212,9 @@ def healthHistory(user_id):
 
     # create figures and axes for plotting
     matplotlib.use("agg")
-    fig1, ax1 = plt.subplots(figsize=(8, 4))  # set the figure width to 800px
-    fig2, ax2 = plt.subplots(figsize=(8, 4))  # set the figure width to 800px
-    fig3, ax3 = plt.subplots(figsize=(8, 4))  # set the figure width to 800px
+    fig1, ax1 = plt.subplots(figsize=(6, 4))  # set the figure width to 800px
+    fig2, ax2 = plt.subplots(figsize=(6, 4))  # set the figure width to 800px
+    fig3, ax3 = plt.subplots(figsize=(6, 4))  # set the figure width to 800px
 
     # Plot Weight Over Time
     ax1.plot(df["date"], df["weight"])

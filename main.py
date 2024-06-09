@@ -138,7 +138,7 @@ def get_user_list():
             "gender": user[3],
             "height": user[4],
         }
-        for user in users
+        for user in users  # type: ignore
     ]
     return jsonify(user_list)
 
