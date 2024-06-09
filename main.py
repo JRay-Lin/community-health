@@ -49,7 +49,7 @@ def new_user():
     try:
         # check height value
         height = float(height)  # type: ignore
-        if height < 0 or height > 300:  # 金氏世界紀錄最高身高的紀錄272cm
+        if height < 40 or height > 300:  # 金氏世界紀錄最高身高的紀錄272cm
             flash("請輸入有效的身高", "error")
             return redirect(url_for("index"))
     except ValueError:
